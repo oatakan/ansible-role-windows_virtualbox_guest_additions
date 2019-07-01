@@ -14,8 +14,7 @@ galaxy_info:
       versions:
         - all
 
-  cloud_platforms:
-    - virtualbox
+  cloud_platforms: []
 
   galaxy_tags:
     - windows
