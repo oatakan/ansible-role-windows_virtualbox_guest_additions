@@ -1,0 +1,5 @@
+---
+vbox_version: 6.0.8
+vbox_guest_additions_download_url: https://download.virtualbox.org/virtualbox/{{ vbox_version }}/VBoxGuestAdditions_{{ vbox_version }}.iso
+
+vbox_iso_file: 'c:\Windows\Temp\windows.iso'
