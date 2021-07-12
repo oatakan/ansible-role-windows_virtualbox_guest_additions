@@ -21,17 +21,17 @@
 
     - name: ensure vbox certs installed
       win_certificate_store:
-        path: '{{ disk_image_out.mount_path }}cert\{{ item }}'
+        path: '{{ disk_image_out.mount_paths[0] }}cert\{{ item }}'
         state: present
         key_storage: machine
         store_name: TrustedPublisher
-      with_items:
+      loop:
         - vbox-sha256.cer
         - vbox-sha1.cer
 
     - name: ensure vbox guest additions installed
       win_package:
-        path: '{{ disk_image_out.mount_path }}VBoxWindowsAdditions.exe'
+        path: '{{ disk_image_out.mount_paths[0] }}VBoxWindowsAdditions.exe'
         creates_path: 'C:\Program files\Oracle\VirtualBox'
         arguments:
           - /S
