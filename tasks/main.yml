@@ -19,15 +19,22 @@
         state: present
       register: disk_image_out
 
-    - name: ensure vbox certs installed
-      win_certificate_store:
-        path: '{{ disk_image_out.mount_paths[0] }}cert\{{ item }}'
-        state: present
-        key_storage: machine
-        store_name: TrustedPublisher
-      loop:
-        - vbox-sha256.cer
-        - vbox-sha1.cer
+    - block:
+        - name: ensure vbox certs installed
+          win_certificate_store:
+            path: '{{ disk_image_out.mount_paths[0] }}cert\{{ item }}'
+            state: present
+            key_storage: machine
+            store_name: TrustedPublisher
+          loop:
+            - vbox-sha256.cer
+            - vbox-sha1.cer
+      rescue:
+        - name: ensure vbox certs installed using certutil
+          win_shell: 'certutil -Enterprise -addstore TrustedPublisher {{ disk_image_out.mount_paths[0] }}cert\{{ item }}'
+          loop:
+            - vbox-sha256.cer
+            - vbox-sha1.cer
 
     - name: ensure vbox guest additions installed
       win_package:
