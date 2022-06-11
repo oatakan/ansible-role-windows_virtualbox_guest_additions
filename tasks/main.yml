@@ -1,5 +1,22 @@
 ---
 
+- name: check if .vbox_version is created
+  win_stat:
+    path: '{{ ansible_user_dir | default("") }}\.vbox_version'
+  register: check_vbox_version_file
+  ignore_errors: true
+
+- block:
+    - name: get VirtualBox version.
+      slurp:
+        src: '{{ ansible_user_dir }}\.vbox_version'
+      register: get_virtualbox_version
+
+    - name: set VirtualBox version.
+      set_fact:
+        vbox_version: "{{ get_virtualbox_version['content'] | b64decode }}"
+  when: check_vbox_version_file.stat.exists
+
 - block:
     - name: check for iso file
       win_stat:
